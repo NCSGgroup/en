@@ -30,7 +30,7 @@
 <meta property="og:description" content="高斯过程是非常重要的一类随机过程，其应用在各领域都非常广泛。本文介绍了高斯过程的一些重要性质，简单说明了高斯过程的应用场景。本文属于随机过程笔记，是根据清华大学电子工程系张颢教授的随机过程线上课程笔记整理而成，点此跳转">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-06T08:19:20.713Z">
-<meta property="article:modified_time" content="2022-06-06T08:26:16.381Z">
+<meta property="article:modified_time" content="2022-06-06T08:28:44.346Z">
 <meta property="article:author" content="Liu">
 <meta property="article:tag" content="数学">
 <meta property="article:tag" content="随机过程">
@@ -311,7 +311,7 @@ mjx-container[display="true"] + br {
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-06-06 16:19:20 / Modified: 16:26:16" itemprop="dateCreated datePublished" datetime="2022-06-06T16:19:20+08:00">2022-06-06</time>
+              <time title="Created: 2022-06-06 16:19:20 / Modified: 16:28:44" itemprop="dateCreated datePublished" datetime="2022-06-06T16:19:20+08:00">2022-06-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -336,7 +336,7 @@ mjx-container[display="true"] + br {
       
         <p>高斯过程是非常重要的一类随机过程，其应用在各领域都非常广泛。本文介绍了高斯过程的一些重要性质，简单说明了高斯过程的应用场景。本文属于随机过程笔记，是根据清华大学电子工程系张颢教授的随机过程线上课程笔记整理而成，<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1V44y1z7yi?share_source=copy_web">点此跳转</a></p>
 <span id="more"></span>
-<h1 id="性质高斯过程有何特别之处">性质：高斯过程有何特别之处?</h1>
+<h1 id="高斯过程的性质">高斯过程的性质</h1>
 <h2 id="基本性质验证概率的非负性和归一性">基本性质验证：概率的非负性和归一性</h2>
 <p>在研究高斯过程的性质之前，我们先来验证多元高斯分布概率密度函数是合法的（当然不得不合法，不过我们据此可以熟悉一下矩阵-向量的运算）。</p>
 <p>概率密度函数最基本地满足两点要求：</p>
@@ -529,7 +529,7 @@ mjx-container[display="true"] + br {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B%E6%9C%89%E4%BD%95%E7%89%B9%E5%88%AB%E4%B9%8B%E5%A4%84"><span class="nav-number">1.</span> <span class="nav-text">性质：高斯过程有何特别之处?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%80%A7%E8%B4%A8%E9%AA%8C%E8%AF%81%E6%A6%82%E7%8E%87%E7%9A%84%E9%9D%9E%E8%B4%9F%E6%80%A7%E5%92%8C%E5%BD%92%E4%B8%80%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">基本性质验证：概率的非负性和归一性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E4%B8%8D%E5%8F%98%E6%80%A7linearity-invariance"><span class="nav-number">1.2.</span> <span class="nav-text">线性不变性(Linearity Invariance)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%94%E5%90%88%E5%88%86%E5%B8%83joint-distribution%E4%B8%8E%E8%BE%B9%E7%BC%98%E5%88%86%E5%B8%83marginal-distribution"><span class="nav-number">1.3.</span> <span class="nav-text">联合分布(Joint Distribution)与边缘分布(Marginal Distribution)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E6%80%A7correlation%E4%B8%8E%E7%8B%AC%E7%AB%8B%E6%80%A7independence"><span class="nav-number">1.4.</span> <span class="nav-text">相关性(Correlation)与独立性(Independence)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cochran-%E5%AE%9A%E7%90%86"><span class="nav-number">1.5.</span> <span class="nav-text">Cochran 定理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%86%E5%B8%83condition-distribution"><span class="nav-number">1.6.</span> <span class="nav-text">条件分布(Condition Distribution)</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">1.</span> <span class="nav-text">高斯过程的性质</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%80%A7%E8%B4%A8%E9%AA%8C%E8%AF%81%E6%A6%82%E7%8E%87%E7%9A%84%E9%9D%9E%E8%B4%9F%E6%80%A7%E5%92%8C%E5%BD%92%E4%B8%80%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">基本性质验证：概率的非负性和归一性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E4%B8%8D%E5%8F%98%E6%80%A7linearity-invariance"><span class="nav-number">1.2.</span> <span class="nav-text">线性不变性(Linearity Invariance)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%94%E5%90%88%E5%88%86%E5%B8%83joint-distribution%E4%B8%8E%E8%BE%B9%E7%BC%98%E5%88%86%E5%B8%83marginal-distribution"><span class="nav-number">1.3.</span> <span class="nav-text">联合分布(Joint Distribution)与边缘分布(Marginal Distribution)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E6%80%A7correlation%E4%B8%8E%E7%8B%AC%E7%AB%8B%E6%80%A7independence"><span class="nav-number">1.4.</span> <span class="nav-text">相关性(Correlation)与独立性(Independence)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cochran-%E5%AE%9A%E7%90%86"><span class="nav-number">1.5.</span> <span class="nav-text">Cochran 定理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%86%E5%B8%83condition-distribution"><span class="nav-number">1.6.</span> <span class="nav-text">条件分布(Condition Distribution)</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
