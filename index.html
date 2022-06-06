@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>三天打鱼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="三天打鱼">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="三天打鱼">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="三天打鱼" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">三天打鱼</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-高斯过程" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/06/06/%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B/" class="article-date">
+  <time class="dt-published" datetime="2022-06-06T04:29:16.931Z" itemprop="datePublished">2022-06-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/06/06/%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B/">高斯过程(Gaussian Processes)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="高斯过程-Gaussian-Processes"><a href="#高斯过程-Gaussian-Processes" class="headerlink" title="高斯过程(Gaussian Processes)"></a>高斯过程(Gaussian Processes)</h1><h2 id="1-定义：什么是高斯过程"><a href="#1-定义：什么是高斯过程" class="headerlink" title="1. 定义：什么是高斯过程?"></a>1. 定义：什么是高斯过程?</h2><p>对于随机过程$X(t)$，如果有</p>
+<script type="math/tex; mode=display">
+\forall n,\ \forall t_1\leq t_2\leq \cdots\leq t_n, \\
+s.t.\ \mathbb{X} = (X(t_1), X(t_2), \cdots, X(t_n))^\mathrm{T} \sim N(\mu, \Sigma)</script><p>则称$X(t)$是高斯过程。</p>
+<p>举例：</p>
+<ol>
+<li><p>$n=1$时，</p>
+<script type="math/tex; mode=display">
+f_X(x) = \cfrac{1}{\sqrt{2\pi}\sigma} \exp\left(-\cfrac{(x-\mu)^2}{2\sigma ^2}\right)</script></li>
+<li><p>$n=2$时，</p>
+<script type="math/tex; mode=display">
+f_\mathbb{X}(x_1,x_2) = \cfrac{1}{2\pi\sigma_1\sigma_2\sqrt{1-\rho^2}} \exp\left(-\cfrac{1}{2(1-\rho^2)}\left( \cfrac{(x_1-\mu_1)^2}{\sigma_1 ^2} - \cfrac{2\rho(x_1 - \mu_1)(x_2 - \mu_2)}{\sigma_1 \sigma_2} + \cfrac{(x_2-\mu_2)^2}{\sigma_2 ^2} \right) \right)</script><p>其中，$\mu_k, \sigma_k$是$X_k$的均值和方差$(k=1,2)$，$\rho = E\left( (X_1-\mu_1)(X_2-\mu_2) \right)$。</p>
+</li>
+<li><p>一般化的$n$时，需要用到矩阵-向量的语言来描述问题：</p>
+<script type="math/tex; mode=display">
+f_\mathbb{X}(x) = \cfrac{1}{(2\pi) ^ \frac{n}{2} (\det\Sigma) ^ \frac{1}{2}} \exp \left( -\cfrac{1}{2}(x-\mu)^\mathrm{T}\Sigma^{-1} (x-\mu) \right)</script><p>其中，$x,\mu \in \mathbb{R}^n$是$n$维向量，$\mu$代表均值；$\Sigma \in \mathbb{R}^{n\times n}$是协方差矩阵，$\Sigma = E\left((x-\mu)(x-\mu)^\mathrm{T}\right)$</p>
+</li>
+</ol>
+<h2 id="2-动机：为什么要学习高斯过程？"><a href="#2-动机：为什么要学习高斯过程？" class="headerlink" title="2. 动机：为什么要学习高斯过程？"></a>2. 动机：为什么要学习高斯过程？</h2><p>高斯过程是自然界中最为常见、最为普遍的一类随机过程。接下来将用三个例子说明其重要意义。</p>
+<h3 id="1-中心极限定理-Central-Limit-Theorem-CLT-与大数定律-Law-of-Large-Numbers-LLN"><a href="#1-中心极限定理-Central-Limit-Theorem-CLT-与大数定律-Law-of-Large-Numbers-LLN" class="headerlink" title="1. 中心极限定理(Central Limit Theorem, CLT)与大数定律(Law of Large Numbers, LLN)"></a>1. 中心极限定理(Central Limit Theorem, CLT)与大数定律(Law of Large Numbers, LLN)</h3><p><strong>中心极限定理</strong>表述为：</p>
+<blockquote>
+<p>有$n$个独立同分布的随机变量$X_1, X_2, \cdots, X_n$，假定他们均值和方差都是$E(X_k) = 0,\ Var(X_k) = 1$，那么当$n$趋于$\infty$时，这些随机变量之和与$\sqrt{n}$的比值是趋于高斯分布的。即</p>
+<script type="math/tex; mode=display">
+\lim_{n\rightarrow \infty} \cfrac{X_1 + X_2 + \cdots +X_n}{\sqrt{n}} \sim N(0,1)</script></blockquote>
+<p>要验证这个定理，我们首先介绍一个非常常用的工具：<strong>特征函数</strong></p>
+<blockquote>
+<p>定义随机变量$X$的特征函数</p>
+<script type="math/tex; mode=display">
+\Phi_X(\omega) = E\left((\exp(i\omega X)\right)</script></blockquote>
+<p>忽略系数而言，显然，特征函数$\Phi_X(\omega) = E(\exp(i\omega X)) = \int _{-\infty}^{+\infty}\exp(i\omega x)f_X(x)\mathrm{d}x$是$f_X$的傅里叶逆变换。因此，同分布的随机变量与其特征函数是一一对应的。同时，由于傅里叶变换的性质我们可以得到，由于$f_X \geq 0$，特征函数$\Phi_X$是正定的。</p>
+<p>有了特征函数这样一个工具，我们可以来验证中心极限定理了。现有$n$个独立同分布的随机变量$X_1, X_2, \cdots, X_n$，假定他们均值和方差都是$E(X_k) = 0,\ Var(X_k) = 1$（这里的假定只是为了简化后面的书写，并不影响该问题的本质），又有随机变量$Y=X_1 + X_2 + \cdots + X_n = \sum_{k=1}^{n}X_k$，于是$Y$的特征函数为</p>
+<script type="math/tex; mode=display">
+\Phi_Y(\omega)  =  E\left(\exp\left( i\omega Y \right)\right)
+ = E\left(\exp\left( i\omega \sum_{k=1}^{n} X_k \right)\right)
+ \overset{\text{(i.i.d)}}{=}  E\left(\prod_{k=1}^{n} \exp\left( i\omega X_k \right) \right)
+ =  \prod_{k=1}^n \Phi_{X_k}(\omega)
+ =  \left(\Phi_X(\omega)\right) ^n</script><p>其中，由于$X_k,\ k=1,2,\cdots,n$独立同分布，他们的特征函数一样，$\Phi_{X_k}(\omega) = \Phi_X(\omega),\ x=1,2,\cdots, n$，又有</p>
+<script type="math/tex; mode=display">
+\Phi_{\frac{Y}{\sqrt{n}}}(\omega)  =  E\left(\exp\left( i\omega \cfrac{Y}{\sqrt{n}} \right)\right)
+ =  E\left(\exp\left( i \cfrac{\omega}{\sqrt{n}} Y \right)\right)
+ =  \Phi_Y(\cfrac{\omega}{\sqrt{n}})
+ =  \left(\Phi_X(\cfrac{\omega}{\sqrt{n}})\right) ^n</script><p>其中</p>
+<script type="math/tex; mode=display">
+\Phi_X(\cfrac{\omega}{\sqrt{n}})  =  E\left(\exp\left( i\omega \cfrac{X}{\sqrt{n}} \right)\right)
+ \overset{\text{(taylor)}}{=}  E\left( 1 + i\omega\cfrac{X}{\sqrt{n}} + \cfrac{1}{2} \left( i\omega \cfrac{X}{\sqrt{n}} \right)^2 +o\left(\cfrac{1}{n}\right)\right)
+ =  1 + i\omega\cfrac{E(X)}{\sqrt{n}} - \cfrac{1}{2}  \omega^2 \cfrac{E(X^2)}{n} + o\left(\cfrac{1}{n}\right)
+ =  1 - \cfrac{\omega^2}{2n} + o\left(\cfrac{1}{n}\right)</script><blockquote>
+<p>复习一个重要极限：</p>
+<script type="math/tex; mode=display">
+\lim_{n\rightarrow \infty} \left( 1 + \cfrac{a}{n} + o\left(\cfrac{1}{n}\right) \right)^n = \exp(a)</script></blockquote>
+<p>现在将$n$趋于$\infty$，有</p>
+<script type="math/tex; mode=display">
+\lim_{n\rightarrow\infty} \Phi_{\frac{Y}{\sqrt{n}}}(\omega)  =  \lim_{n\rightarrow\infty} \left(\Phi_X(\cfrac{\omega}{\sqrt{n}})\right) ^n
+ =  \lim_{n\rightarrow\infty} \left(1 - \cfrac{\omega^2}{2n} + o\left(\cfrac{1}{n}\right)\right)^n
+ =  \exp\left(-\cfrac{\omega^2}{2} \right)</script><p>那么高斯分布的特征函数是怎样的呢？下面进一步分析。</p>
+<p>对于均值为$m$，方差为$\sigma^2$的高斯分布$X$，其概率密度函数为</p>
+<script type="math/tex; mode=display">
+f_X (x)= \cfrac{1}{\sqrt{2\pi} \sigma} \exp\left( -\cfrac{(x-m)^2}{2\sigma^2} \right)</script><p>于是，根据定义，$X$的特征函数为</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_X(\omega) & = & \int_{-\infty}^{+\infty} \exp(i\omega x)f_X(x)\mathrm{d}x \\
+& = & \int_{-\infty}^{+\infty} \cfrac{1}{\sqrt{2\pi} \sigma} \exp\left( -\cfrac{(x-m)^2}{2\sigma^2} + i\omega x \right) \mathrm{d}x \\
+& = & \int_{-\infty}^{+\infty} \cfrac{1}{\sqrt{2\pi} \sigma} \exp\left( -\cfrac{1}{2\sigma ^2} \left(x - i\omega \sigma ^2 - m\right)^2 + im\omega - \cfrac{1}{2} \omega^2\sigma^2 \right) \mathrm{d}x \\
+& = & \exp\left(im\omega - \cfrac{1}{2} \omega^2\sigma^2 \right) \cfrac{1}{\sqrt{2\pi} \sigma} \int_{-\infty}^{+\infty} \exp\left( -\cfrac{1}{2\sigma ^2} \left(x - i\omega \sigma ^2 - m\right)^2 \right) \mathrm{d}x \\
+& = & \exp\left(im\omega - \cfrac{1}{2} \omega^2\sigma^2 \right)
+\end{array}</script><p>可以看出，高斯分布的特征函数仍是高斯的形状。令均值$m=0$，方差$\sigma ^2=1$，就得到$\Phi_X(\omega) = \exp\left( -\cfrac{\omega^2}{2} \right)$。因此，刚才得到的$\lim\Phi_Y$是标标准准的高斯分布的特征函数。至此，中心极限定理就证明出来了。</p>
+<p>进一步地，我们看看大数定律。<strong>大数定律</strong>表述为</p>
+<blockquote>
+<p>有$n$个独立同分布的随机变量$X_1, X_2, \cdots, X_n$，假定他们均值都是$E(X_k) = m$，那么当$n$趋于$\infty$时，这些随机变量之和与$n$的比值趋于一个确定的值，这个值就是均值$m$。即</p>
+<script type="math/tex; mode=display">
+\lim_{n\rightarrow \infty} \cfrac{X_1 + X_2 + \cdots +X_n}{n} = m</script></blockquote>
+<p>这个定律的验证与中心极限定理类似，不过由于分母是$n$，后续的泰勒展开就只需要展开到一阶即可</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_X(\cfrac{\omega}{n}) & = & E\left(\exp\left( i\omega \cfrac{X}{n} \right)\right) \\
+& \overset{\text{(taylor)}}{=} & E\left( 1 + i\omega\cfrac{X}{n} + o\left(\cfrac{1}{n}\right)\right) \\
+& = & 1 + i\omega\cfrac{E(X)}{n} + o\left(\cfrac{1}{n}\right) \\
+& = & 1 + \cfrac{i\omega m}{n} + o\left(\cfrac{1}{n}\right)
+\end{array}</script><p>进而</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\lim_{n\rightarrow\infty} \Phi_{\frac{Y}{n}}(\omega) & = & \lim_{n\rightarrow\infty} \left(\Phi_X(\cfrac{\omega}{n})\right) ^n \\
+& = & \lim_{n\rightarrow\infty} \left(1 + \cfrac{i\omega m}{n} + o\left(\cfrac{1}{n}\right)\right)^n \\
+& = & \exp\left(i\omega m \right) \\
+& = & \Phi_m(\omega)
+\end{array}</script><p>得到的是常函数m的特征函数，至此，大数定律就证明结束了。</p>
+<h3 id="2-随机扩散-Random-Diffusion-模型"><a href="#2-随机扩散-Random-Diffusion-模型" class="headerlink" title="2. 随机扩散(Random Diffusion)模型"></a>2. 随机扩散(Random Diffusion)模型</h3><p>为简化计算，考虑一维情况。现有一维随机扩散模型，用$f(x,t)$表示在$t$时刻，$x$处粒子出现的概率密度。初始化条件为$f(0,0)=1$，求$f(x,t)$的一般表达式。</p>
+<p>首先建立模型，用$\rho(y)$表示在$t=\tau$时位置$y$处的粒子出现的概率密度，即$\rho(y) = f(y,\tau)$，显然，$\rho(y)\geq0,\ \int_{-\infty}^{+\infty} \rho(y)\mathrm{d}y = 1$。自然地，还可以有这样两个假设：</p>
+<ol>
+<li>$\rho(-y) = \rho(y)$</li>
+<li>$\int_{-\infty}^{+\infty} y\rho(y)\mathrm{d}y = 0$</li>
+</ol>
+<p>于是，不难理解，</p>
+<script type="math/tex; mode=display">
+f(x,t+\tau) = \int_{-\infty}^{+\infty} f(x-y, t)\rho(y)\mathrm{d}y</script><p>方程左右的$f$在$(x,t)$处分别对$x,\ t$展开，于是</p>
+<script type="math/tex; mode=display">
+f(x,t) + \cfrac{\partial{f}}{\partial{t}} \tau = \int_{-\infty}^{+\infty} \left( f(x,t) - \cfrac{\partial{f}}{\partial{x}} y + \cfrac{1}{2}\cfrac{\partial^2{f}}{\partial{x^2}} y^2 \right) \rho(y)\mathrm{d}y</script><p>带入上面条件，积分化简得</p>
+<script type="math/tex; mode=display">
+\cfrac{\partial{f}}{\partial{t}} \tau = \cfrac{1}{2} \cfrac{\partial^2{f}}{\partial{x^2}} \int_{-\infty}^{+\infty}y^2\rho(y)\mathrm{d}y</script><p>令</p>
+<script type="math/tex; mode=display">
+c = \cfrac{1}{2\tau}\int_{-\infty}^{+\infty}y^2\rho(y)\mathrm{d}y</script><p>上面方程则写作</p>
+<script type="math/tex; mode=display">
+\cfrac{\partial{f}}{\partial{t}} = c \cfrac{\partial^2{f}}{\partial{x^2}}</script><p>这个偏微分方程被称为<strong>扩散方程</strong>(diffusion equation)，其解（解法略，很常见的一类微分方程）为</p>
+<script type="math/tex; mode=display">
+f(x,t) = \cfrac{1}{\sqrt{2\pi ct}} \exp(-\cfrac{x^2}{2ct})</script><p>回到模型，可以看出，对于任一时间$t$，粒子在全空间（模型假设是一维空间，无伤大雅）上密度是标标准准的高斯分布。</p>
+<h3 id="3-最大熵-Maximum-Entropy"><a href="#3-最大熵-Maximum-Entropy" class="headerlink" title="3. 最大熵(Maximum Entropy)"></a>3. 最大熵(Maximum Entropy)</h3><p>对于随机过程$X$，其概率密度分布函数为$f_X(x)$，定义$X$的熵函数$H(X)$：</p>
+<blockquote>
+<script type="math/tex; mode=display">
+H(X) = -\int_{-\infty}^{+\infty} f_X(x) \log f_X(x) \mathrm{d}x</script></blockquote>
+<p>熵$H(X)$反映的是随机过程$X$的“无序度”，通俗地说，就是这个随机过程究竟有多“随机”。</p>
+<p>现在我们考察，定义在$(-\infty, +\infty)$上的，确定一阶矩$E(X)=\mu$，二阶矩$E(X^2) = \sigma^2$的随机过程$X$，要满足怎样的分布才能让自己是最“随机”的，即熵最大。</p>
+<p>$X$的概率密度函数显然满足</p>
+<script type="math/tex; mode=display">
+\int_{-\infty}^{+\infty}f_X(x)\mathrm{d}x - 1 = 0 \\
+\int_{-\infty}^{+\infty}xf_X(x)\mathrm{d}x - \mu  = 0 \\
+\int_{-\infty}^{+\infty}x^2f_X(x)\mathrm{d}x - \sigma^2 =0 \\</script><p>将这些等式视为约束条件，构建拉格朗日函数</p>
+<script type="math/tex; mode=display">
+\begin{array}{rl}
+\mathscr{L}(f_X(x)) = & -\int_{-\infty}^{+\infty} f_X(x) \log f_X(x) \mathrm{d}x \\
+ & + \lambda_1\left(\int_{-\infty}^{+\infty}f_X(x)\mathrm{d}x - 1\right) \\
+ & + \lambda_2\left(\int_{-\infty}^{+\infty}xf_X(x)\mathrm{d}x - \mu\right) \\
+ & + \lambda_3\left(\int_{-\infty}^{+\infty}x^2f_X(x)\mathrm{d}x - \sigma^2\right)
+\end{array}</script><p>现在要求得一个$f_X$，使得$\mathscr{L}$取极大值。注意，不同于普通的拉格朗日乘子法，这里待求得是一个函数$f$而非自变量$x$，普通得求导显然不可用，那么要如何做到呢？这里我们利用泛函分析里一个重要工具：变分法(funtional variational method)。</p>
+<p>我们假定待求$f$的最优解是$f_0$，并且构造一元函数</p>
+<script type="math/tex; mode=display">
+G(t) = \mathscr{L}(f_0 + tg)</script><p>其中$g$是与$f$自变量一致的任意函数。由于$f_0$是待求$f$的最优解，有</p>
+<script type="math/tex; mode=display">
+G(0) = \mathscr{L}(f_0) \geq \mathscr{L}(f_0 + tg) = G(t)</script><p>即$G(0)$是$G(t)$的最大值，故有</p>
+<script type="math/tex; mode=display">
+\left.\cfrac{\partial}{\partial{t}}G(t)\right|_{t=0} = 0</script><p>代入$G(t) = \mathscr{L}(f_0 + tg)$得</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\left.\cfrac{\partial}{\partial{t}}G(t)\right|_{t=0} & = &  \cfrac{\partial}{\partial{t}}\left(-\int_{-\infty}^{+\infty} (f+tg) \log (f+tg) \mathrm{d}x \right.\\
+& & + \left.\lambda_1\left(\int_{-\infty}^{+\infty}(f+tg)\mathrm{d}x - 1\right) \right.\\
+& & + \left.\lambda_2\left(\int_{-\infty}^{+\infty}x(f+tg)\mathrm{d}x - \mu\right) \right.\\
+& & + \left.\left.\lambda_3\left(\int_{-\infty}^{+\infty}x^2(f+tg)\mathrm{d}x - \sigma^2\right) \right)\right|_{t=0} \\
+& = & \int_{-\infty}^{+\infty} g\left( -\log{f} + (\lambda_1 - 1) + \lambda_2x + \lambda_3x^2 \right) \mathrm{d}x\\
+& = & 0
+\end{array}</script><p>由于$g$是任意的函数，因此被积函数中，必然有</p>
+<script type="math/tex; mode=display">
+-\log{f} + (\lambda_1 - 1) + \lambda_2x + \lambda_3x^2 \equiv 0</script><p>于是</p>
+<script type="math/tex; mode=display">
+f = f_X(x) = \exp\left( \lambda_3 x^2 + \lambda_2 x + \lambda_1 - 1 \right)</script><p>这是标标准准的高斯概率密度函数，因此随机过程$X$是高斯过程时，其熵最大。</p>
+<p>实际上，$\lambda_1,\lambda_2,\lambda_3$显然是可以解的，虽然过程有点复杂，但结果确确实实是</p>
+<script type="math/tex; mode=display">
+f_X(x) = \cfrac{1}{\sqrt{2\pi}\sigma}\exp\left( -\cfrac{(x-\mu)^2}{2\sigma^2} \right)</script><blockquote>
+<p>上面考虑的是双边无界条件。实际上，如果我们考虑单边无解或者双边有界情况的话，情况会有所不同。</p>
+<ol>
+<li><p>$x\in [0,+\infty)$，此时只需要约束一阶矩$\int_{-\infty}^{+\infty}xf_X(x)\mathrm{d}x - \mu  = 0$，最大熵的$f$为指数分布：</p>
+<script type="math/tex; mode=display">
+f_X(x) = \lambda \exp\left( -\lambda x \right) I_{[0,+\infty)}(x)</script></li>
+<li><p>$x\in[a,b]$，此时不需要对矩有所约束，最大熵的$f$为均匀分布：</p>
+<script type="math/tex; mode=display">
+f_X(x) = \cfrac{1}{b-a}</script></li>
+</ol>
+</blockquote>
+<h2 id="3-性质：高斯过程有何特别之处"><a href="#3-性质：高斯过程有何特别之处" class="headerlink" title="3. 性质：高斯过程有何特别之处?"></a>3. 性质：高斯过程有何特别之处?</h2><h3 id="基本性质验证：概率的非负性和归一性"><a href="#基本性质验证：概率的非负性和归一性" class="headerlink" title="基本性质验证：概率的非负性和归一性"></a>基本性质验证：概率的非负性和归一性</h3><p>在研究高斯过程的性质之前，我们先来验证多元高斯分布概率密度函数是合法的（当然不得不合法，不过我们据此可以熟悉一下矩阵-向量的运算）。</p>
+<p>概率密度函数最基本地满足两点要求：</p>
+<ol>
+<li><p>非负性</p>
+<script type="math/tex; mode=display">
+f\geq0</script></li>
+<li><p>归一性</p>
+<script type="math/tex; mode=display">
+\int f =1</script></li>
+</ol>
+<p>前面已经给出，多元高斯分布地概率密度函数为</p>
+<script type="math/tex; mode=display">
+f_\mathbb{X}(x) = \cfrac{1}{(2\pi) ^ \frac{n}{2} (\det\Sigma) ^ \frac{1}{2}} \exp \left( -\cfrac{1}{2}(x-\mu)^\mathrm{T}\Sigma^{-1} (x-\mu) \right)</script><p>对于非负性，$e$指数部分显然非负。而协方差矩阵$\Sigma=E((x-\mu)(x-\mu)^\mathrm{T})$是实对称的，且所有主元$\Sigma_{ii} = E((x_i-\mu_i)^2)$都是非负的，故$\Sigma$是正定的。</p>
+<blockquote>
+<p>不妨回头看看实对称矩阵正定的几个等价充要条件。</p>
+</blockquote>
+<p>因此，作为分母，其行列式恒为正。至此，非负性已得到了验证。</p>
+<p>对于归一性，我们可以直接开始计算</p>
+<script type="math/tex; mode=display">
+\int_{\mathbb{R}^n}f_X(x)\mathrm{d}x = \cfrac{1}{(2\pi) ^ \frac{n}{2} (\det\Sigma) ^ \frac{1}{2}} \int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}(x-\mu)^\mathrm{T}\Sigma^{-1} (x-\mu) \right) \mathrm{d}x_1\mathrm{d}x_2\cdots\mathrm{d}x_n</script><p>这个积分中，可以认为最难搞的就是被积函数中$e$指数上的$\Sigma^{-1}$了。稍加思考，$\Sigma$是对称且正定的，因此可以将其对角化，写作这样的形式</p>
+<script type="math/tex; mode=display">
+\Sigma = U^\mathrm{T}\Lambda U</script><p>其中，$U$是正交的，$U^\mathrm{T}U=UU^\mathrm{T}=I$；$\Lambda$是对角阵，$\Lambda = \mathrm{diag}(\lambda_1, \lambda_2, \cdots, \lambda_n)$。进一步地，有</p>
+<script type="math/tex; mode=display">
+\Sigma = U^\mathrm{T} \Lambda^{\frac{1}{2}}U U^\mathrm{T} \Lambda^{\frac{1}{2}}U, \\
+\Sigma^{-1} =  U^\mathrm{T} \Lambda^{-\frac{1}{2}}U U^\mathrm{T} \Lambda^{-\frac{1}{2}}U = B^{\mathrm{T}} B</script><p>其中，$B = U^\mathrm{T} \Lambda^{-\frac{1}{2}}U$。</p>
+<p>于是，暂时抛开常数项，积分部分</p>
+<script type="math/tex; mode=display">
+\int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}(x-\mu)^\mathrm{T}\Sigma^{-1} (x-\mu) \right) \mathrm{d}x_1\mathrm{d}x_2\cdots\mathrm{d}x_n  =  \int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}(x-\mu)^\mathrm{T}B^{\mathrm{T}} B (x-\mu) \right) \mathrm{d}x_1\mathrm{d}x_2\cdots\mathrm{d}x_n \\</script><p>令$y=B(x-\mu)$，则有$y^\mathrm{T}=(x-\mu)^\mathrm{T}B^\mathrm{T}$，积分元</p>
+<script type="math/tex; mode=display">
+\left( \cfrac{\mathrm{d}y}{\mathrm{d}x} \right) = B \Rightarrow \mathrm{d}x = (\det B)^{-1}\mathrm{d}y</script><blockquote>
+<p>具体可以看看雅可比积分换元。</p>
+</blockquote>
+<p>于是上面积分就变为了</p>
+<script type="math/tex; mode=display">
+\int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}y^{\mathrm{T}} y \right) (\det B)^{-1}\mathrm{d}y</script><p>其中，$(\det B)^{-1} = (\det \Sigma)^{\frac{1}{2}}$，故积分可以继续写作</p>
+<script type="math/tex; mode=display">
+\int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}y^{\mathrm{T}} y \right) (\det \Sigma)^{\frac{1}{2}}\mathrm{d}y = (\det \Sigma)^{\frac{1}{2}} \int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}y^{\mathrm{T}} y \right) \mathrm{d}y</script><p>注意这里$y^{\mathrm{T}}y=\sum_{k=1}^{n}y_k^2$，再将前面的系数代回，计算$f_X$在全空间的积分，有</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\int_{\mathbb{R}^n} f_X(x)\mathrm{d}x & = & \int_{\mathbb{R}^n} \cfrac{1}{(2\pi) ^ \frac{n}{2} (\det\Sigma) ^ \frac{1}{2}} \exp \left( -\cfrac{1}{2}(x-\mu)^\mathrm{T}\Sigma^{-1} (x-\mu) \right) \mathrm{d}x \\
+& = & \cfrac{1}{(2\pi) ^ \frac{n}{2} (\det\Sigma) ^ \frac{1}{2}} \left((\det \Sigma)^{\frac{1}{2}} \int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}y^{\mathrm{T}} y \right) \mathrm{d}y \right) \\
+& = & \cfrac{1}{(2\pi) ^ \frac{n}{2} } \int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}\sum_{k=1}^{n}y_k^2 \right) \mathrm{d}y \\
+& = & \prod_{k=1}^{n} \left( \cfrac{1}{(2\pi) ^ \frac{1}{2} } \int_{\mathbb{R}^n} \exp \left( -\cfrac{1}{2}y_k^2 \right) \mathrm{d}y_k \right) \\
+\end{array}</script><p>括号内积分项可以转换在极坐标下进行很同意得到结果为$\sqrt{2\pi}$。至此我们可以得到最终结果</p>
+<script type="math/tex; mode=display">
+\int_{\mathbb{R}^n}f_X(x)\mathrm{d}x = 1</script><p>即多元高斯分布的概率密度函数在整个定义空间上的积分确实是$1$。</p>
+<h3 id="线性不变性-Linearity-Invariance"><a href="#线性不变性-Linearity-Invariance" class="headerlink" title="线性不变性(Linearity Invariance)"></a>线性不变性(Linearity Invariance)</h3><p>定义$\mathbb{X}\in\mathbb{R}^n$是$n$维高斯随机变量，$\mathbb{X}\sim N(\mu,\Sigma)$；$A\in \mathbb{R}^{m\times n}$是$m\times n$的线性变换矩阵，且$\mathbb{Y} = A\mathbb{X}$。那么一定有</p>
+<script type="math/tex; mode=display">
+\mathbb{Y} \sim (A\mu, A\Sigma A^{\mathrm{T}})</script><p>通俗地讲，高斯分布的经过线性变换后仍然是高斯分布的。验证这个结论很简单，不过需要一个前提工作，也就是要得到$\mathbb{X}$的特征函数</p>
+<blockquote>
+<script type="math/tex; mode=display">
+\Phi_\mathbb{X}(\omega) = E \left( \exp(i\omega^\mathrm{T}\mathbb{X}) \right) = \exp \left( i\omega^{\mathrm{T}} \mu - \cfrac{1}{2}\omega ^{\mathrm{T}}\Sigma \omega \right)</script><p>特征函数是研究随机过程一项很重要的工具，后面会经常用到。这里不妨自己先验证一下，后续有时间我再补充。</p>
+</blockquote>
+<p>据此我们写出$\mathbb{Y}$的特征函数</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_\mathbb{Y}(\omega) & = & E \left( \exp(i\omega^\mathrm{T}\mathbb{Y}) \right) \\
+& = & E \left( \exp(i\omega^\mathrm{T} A\mathbb{X}) \right) \\
+& = & E \left( \exp(i (A^\mathrm{T}\omega)^\mathrm{T} \mathbb{X}) \right)
+\end{array}</script><p>这实际上就是$\mathbb{X}$的特征函数$\Phi_\mathbb{X}(\omega^\prime)$在$\omega^\prime = A^\mathrm{T} \omega$处的取值，故</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_\mathbb{Y}(\omega) & = & \left. \exp \left( i(\omega^\prime) ^{\mathrm{T}} \mu - \cfrac{1}{2}(\omega^\prime) ^{\mathrm{T}}\Sigma (\omega^\prime) \right) \right|_{\omega^\prime = A^\mathrm{T} \omega} \\
+& = & \exp \left( i\omega^\mathrm{T}A \mu - \cfrac{1}{2}\omega^\mathrm{T}A\Sigma A^\mathrm{T} \omega \right)
+\end{array}</script><p>观察这里结果的形式，特征函数$\Phi_\mathbb{Y}(\omega)$实际上就是高斯分布$N(A\mu, A\Sigma A^\mathrm{T})$所对应的特征函数。至此，$\mathbb{Y} \sim (A\mu, A\Sigma A^{\mathrm{T}})$得证。</p>
+<h3 id="联合分布-Joint-Distribution-与边缘分布-Marginal-Distribution"><a href="#联合分布-Joint-Distribution-与边缘分布-Marginal-Distribution" class="headerlink" title="联合分布(Joint Distribution)与边缘分布(Marginal Distribution)"></a>联合分布(Joint Distribution)与边缘分布(Marginal Distribution)</h3><p>现在来考察多维随机变量联合高斯分布和边缘高斯分布的关系。</p>
+<p>现有$\mathbb{X} = \left( X_1, X_2, \cdots , X_n\right)^\mathrm{T}$，另$\widetilde{\mathbb{X}} = \left( X_{n_1}, X_{n_2}, \cdots , X_{n_k}\right)^\mathrm{T}$，其中， $n_1, n_2, \cdots , n_k \in \left(1,2,\cdots,n\right)$。根据前面的线性不变性，$\widetilde{\mathbb{X}}$显然也是高斯的。即，联合高斯分布是能充分说明其边缘分布也是高斯的。</p>
+<p>这个结论反过来成立吗？答案是未必的。那么要如何判断多维随机变量的高斯性呢？这里给出一个判据：</p>
+<blockquote>
+<p>对随机变量$\mathbb{X} \in \mathbb{R}^n,\forall \alpha \in \mathbb{R}^n$，都有$\alpha^{\mathrm{T}} \mathbb{X} \sim N$ 是（一维）高斯分布的，则$\mathbb{X}\sim N$是多元高斯分布的。</p>
+</blockquote>
+<p>实际上这是一个充分必要条件。下面来证明。</p>
+<p><strong>必要性“$\Leftarrow$”</strong></p>
+<p>这里必要性是显然的，实际上是线性不变性的一种特殊情况而已。</p>
+<p><strong>充分性“$\Rightarrow$”</strong></p>
+<p>证：根据定义，写出随机变量$\mathbb{X}$的特征函数</p>
+<script type="math/tex; mode=display">
+\Phi_\mathbb{X}(\omega) = E\left( \exp\left( i\omega^\mathrm{T}\mathbb{X} \right) \right)</script><p>由于目前还不知道$\mathbb{X}$的情况，不太好继续往下写了。然而这里我们已知$\forall \alpha \in \mathbb{R}^n$, 都有$\alpha^{\mathrm{T}} \mathbb{X} \sim N$ ，那么把上面式中$\omega^\mathrm{T}\mathbb{X}$整体看作一个（一维的）随机变量，这个随机变量根据已知条件就可以知道是高斯的了。又根据特征函数的形式，我们可以把上式看作是$\omega^\mathrm{T}\mathbb{X}$的特征函数$\Phi_{\omega^\mathrm{T}\mathbb{X}}(\omega^\prime)$在$\omega^\prime = 1$处的取值，即</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_\mathbb{X}(\omega) & = & \left. \Phi_{\omega^\mathrm{T}\mathbb{X}}(\omega^\prime) \right|_{\omega^\prime = 1} \\
+& = & \exp\left( i\mu_{\omega^\mathrm{T}\mathbb{X}} - \cfrac{1}{2}\sigma_{\omega^\mathrm{T}\mathbb{X}}^2 \right)
+\end{array}</script><p>其中，$\mu_{\omega^\mathrm{T}\mathbb{X}} , \sigma_{\omega^\mathrm{T}\mathbb{X}}^2$分别是一维随机变量$\omega^\mathrm{T}\mathbb{X}$的均值和方差。现计算之。</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\mu_{\omega^\mathrm{T}\mathbb{X}} & = & E\left( \omega^\mathrm{T}\mathbb{X} \right) = \omega^\mathrm{T} E\left(\mathbb{X}\right) = \omega^\mathrm{T}\mu \\
+\\
+\sigma_{\omega^\mathrm{T}\mathbb{X}}^2 & = & E\left( \left( \omega^\mathrm{T}\mathbb{X} - E\left( \omega^\mathrm{T}\mathbb{X} \right) \right)^2 \right) \\
+& = & E\left( \left( \omega^\mathrm{T} \mathbb{X} -  \omega^\mathrm{T} \mu \right)^2\right) \\
+& = & \omega^\mathrm{T} E\left( \left( \mathbb{X} -  \mu \right) \left( \mathbb{X} -  \mu \right)^\mathrm{T} \right) \omega \\
+& = & \omega^\mathrm{T}\Sigma \omega^\mathrm{T}
+\end{array}</script><p>故</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_\mathbb{X}(\omega) & = & \left. \Phi_{\omega^\mathrm{T}\mathbb{X}}(\omega^\prime) \right|_{\omega^\prime = 1} \\
+& = & \exp\left( i\mu_{\omega^\mathrm{T}\mathbb{X}} - \cfrac{1}{2}\sigma_{\omega^\mathrm{T}\mathbb{X}}^2 \right) \\
+& = & \exp\left( i\omega^\mathrm{T}\mu - \cfrac{1}{2}\omega^\mathrm{T}\Sigma \omega^\mathrm{T} \right)
+\end{array}</script><p>得到标标准准的高斯分布特征函数。故$\mathbb{X} \sim N(\mu, \Sigma)$是服从联合高斯分布的。</p>
+<p>至此，上述结论的充分性和必要性都得到了证明。</p>
+<h3 id="相关性-Correlation-与独立性-Independence"><a href="#相关性-Correlation-与独立性-Independence" class="headerlink" title="相关性(Correlation)与独立性(Independence)"></a>相关性(Correlation)与独立性(Independence)</h3><p>首先需要明白的是，相关是描述随机变量在二阶矩上的联系，独立性是以概率密度函数来描述的随机变量之间的联系。</p>
+<blockquote>
+<p> 现有随机变量$X, Y\in \mathbb{R}^n$，其概率密度分布函数和联合概率密度分布函数分别是$f_X(x), f_Y(y), f_{XY}(x,y)$，那么</p>
+<ol>
+<li>若$E(XY)=E(X)E(Y)$，则称随机变量$X,Y$是不相关的；</li>
+<li>若$f_{XY}(x,y) = f_X(x)f_Y(y)$，则称随机变量$X,Y$是独立的。</li>
+</ol>
+</blockquote>
+<p>从定义来看，<strong>独立(Independent)的条件是要强于不相关(Uncorrelated)的</strong>，即</p>
+<script type="math/tex; mode=display">
+X, Y \left\{
+\begin{array}{rcl}
+\text{independent} & \Rightarrow & \text{uncorrelated} \\
+\text{uncorrelated} & \not \Rightarrow & \text{independent}
+\end{array}
+\right.</script><p>这随便通过一个例子就能看出：</p>
+<p>设$\theta \sim U(0,2\pi)$满足均匀分布，构建随机变量$X=\cos(\theta), Y=\sin(\theta)$。显然$X,Y$不独立；计算其相关：</p>
+<script type="math/tex; mode=display">
+E(X) = E(\cos \theta) = 0,\\
+E(Y) = E(\sin \theta) = 0,\\
+E(XY) = E(\cos\theta \sin\theta) = \cfrac{1}{2}(\sin 2\theta) = 0</script><p>故$E(X)E(Y)=E(XY)$。尽管$X,Y$不独立，不过也是不相关的。</p>
+<p>那么，如果是高斯分布的随机变量$X,Y$，它们独立就能等价不相关吗？继续来个例子：</p>
+<p>设$X\sim N(0,1)$是服从高斯分布的，又有伯努利随机变量$Z\sim \left( \begin{array}{} 1 &amp; -1\\ \cfrac{1}{2} &amp; \cfrac{1}{2} \end{array} \right)$，构建$Y = ZX$</p>
+<ol>
+<li>$Y$是高斯的吗？看特征函数。<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_Y(\omega) & = & E\left(\exp (i\omega Y)\right) \\
+& = & E\left(\exp (i\omega ZX)\right)\\
+& = & E_Z\left( E_X\left(\left. \exp (i\omega ZX) \right|Z \right) \right)
+\end{array}</script>其中，$E_X$项在，$Z$被“条件住”了，在此可以看作是常量，这一项可以看作是$X$的特征函数$\Phi_X(\omega^\prime)$在$\omega^\prime = \omega Z$处的取值<script type="math/tex; mode=display">
+\begin{array}{rcl}
+E_X\left(\left. \exp (i\omega ZX) \right|Z \right) & = & \left. \Phi_X(\omega^\prime) \right|_{\omega^\prime = \omega Z} \\
+& = & \exp \left( i\omega Zm - \cfrac{1}{2}\sigma^2 (\omega Z)^2 \right)
+\end{array}</script>其中，由于$X\sim N(0,1)$，故这里的$m=0, \sigma^2 = 1$。于是<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\Phi_Y(\omega) & = & E_Z\left( E_X\left(\left. \exp (i\omega ZX) \right|Z \right) \right) \\
+& = & E\left( \exp \left(i\omega Zm - \cfrac{1}{2}\sigma^2 (\omega Z)^2 \right) \right) \\
+& = & E\left( \exp \left(- \cfrac{1}{2}\omega^2 Z^2 \right) \right) \\
+\end{array}</script>由于$Z\sim \left( \begin{array}{} 1 &amp; -1\\ \cfrac{1}{2} &amp; \cfrac{1}{2} \end{array} \right)$，因此不论取$1$还是$-1$，$Z^2 \equiv 1$。故<script type="math/tex; mode=display">
+\Phi_Y(\omega) = \exp(-\cfrac{1}{2}\omega ^2)</script>因此，$Y$是标标准准的高斯分布$Y\sim N(0,1)$。</li>
+</ol>
+<ol>
+<li><p>$X,Y$相关吗？计算$E(XY), E(X)E(Y)$。</p>
+<script type="math/tex; mode=display">
+E(XY) = E(ZX^2) = E(Z)E(X^2)</script><p>其中，$E(Z) = 1\times \cfrac{1}{2} + (-1) \times \cfrac{1}{2} = 0$，故$E(XY) = 0$。</p>
+<p>而$X, Y$都是$m=0, \sigma^2 = 1$的高斯分布，故$E(X) = E(Y) = 0$</p>
+<p>故$E(XY) = E(X)E(Y)$，$X,Y$不相关。</p>
+</li>
+</ol>
+<ol>
+<li>$X,Y$独立吗？<br>$Y = ZX$欸，怎么可能独立？显然不独立啊！</li>
+</ol>
+<p>所以，即使$X,Y$都是高斯的，其不相关仍然不能推导出独立。</p>
+<p>怎样的条件下，独立和不相关才能是等价的呢？答案是联合高斯分布，即</p>
+<script type="math/tex; mode=display">
+X,Y:\ \left.
+\begin{array}{rcl}
+\text{joint Gaussian} \\
+\text{uncorrelated}
+\end{array}
+\right\}
+\Rightarrow \text{independent}</script><p>一般地，如果多维随机变量$\mathbb{X} = (X_1, X_2, \cdots, X_n)^\mathrm{T}\in \mathbb{R}^n$是<strong>联合高斯分布</strong>的，那么$\mathbb{X}$各分量<strong>不相关$\Leftrightarrow$独立</strong>。</p>
+<p>下面给出二维$n=2$情况下的证明。</p>
+<p><strong>必要性$\Leftarrow$</strong>不需要多说，这是显然的。</p>
+<p>只需要证明<strong>充分性$\Rightarrow$</strong></p>
+<p>要说明独立性，首先计算$\mathbb{X} = \left(X_1, X_2\right)^\mathrm{T}$的联合密度分布函数</p>
+<script type="math/tex; mode=display">
+f_\mathbb{X}(x_1,x_2) = \cfrac{1}{2\pi\sigma_1\sigma_2\sqrt{1-\rho^2}} \exp\left(-\cfrac{1}{2(1-\rho^2)}\left( \cfrac{(x_1-\mu_1)^2}{\sigma_1 ^2} - \cfrac{2\rho(x_1 - \mu_1)(x_2 - \mu_2)}{\sigma_1 \sigma_2} + \cfrac{(x_2-\mu_2)^2}{\sigma_2 ^2} \right) \right)</script><p>其中，$\mu_k, \sigma_k$是$X_k$的均值和方差$(k=1,2)$，$\rho = E\left( (X_1-\mu_1)(X_2-\mu_2) \right)$。</p>
+<p>现在我们来看$\exp$指数上的交叉项：</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\rho & = & E\left( (X_1-\mu_1)(X_2-\mu_2) \right) \\
+& = & E(X_1X_2) - E(X_1)\mu_2 - E(X_2)\mu_1 + \mu_1\mu_2 \\
+& = & E(X_1X_2) - \mu_1\mu_2
+\end{array}</script><p>由已知条件，$X_1,X_2$不相关，即$E(X_1X_2) = E(X_1)E(X_2) = \mu_1\mu_2$，故$\rho = 0$。因此有</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+f_\mathbb{X}(x_1,x_2) & = & \cfrac{1}{2\pi\sigma_1\sigma_2\sqrt{1-\rho^2}} \exp\left(-\cfrac{1}{2(1-\rho^2)}\left( \cfrac{(x_1-\mu_1)^2}{\sigma_1 ^2} - \cfrac{2\rho(x_1 - \mu_1)(x_2 - \mu_2)}{\sigma_1 \sigma_2} + \cfrac{(x_2-\mu_2)^2}{\sigma_2 ^2} \right) \right)\\
+& = & \cfrac{1}{2\pi\sigma_1\sigma_2} \exp\left(-\cfrac{1}{2}\left( \cfrac{(x_1-\mu_1)^2}{\sigma_1 ^2} + \cfrac{(x_2-\mu_2)^2}{\sigma_2 ^2} \right) \right)\\
+& = & \cfrac{1}{\sqrt{2\pi}\sigma_1} \exp\left(-\cfrac{1}{2}\cfrac{(x_1-\mu_1)^2}{\sigma_1 ^2}\right) \cdot \cfrac{1}{\sqrt{2\pi}\sigma_2} \exp\left(-\cfrac{1}{2}\cfrac{(x_2-\mu_2)^2}{\sigma_2 ^2}\right)\\
+& = & f_{X_1}(x_1)\cdot f_{X_2}(x_2)
+\end{array}</script><p>即$X_1, X_2$相互独立。至此，二维$n=2$情况下，随机变量$\mathbb{X} = (X_1, X_2)^\mathrm{T}\in \mathbb{R}^n$是联合高斯分布的，那么$\mathbb{X}$各分量$X_1,X_2$不相关与独立的等价性便证明出来了。</p>
+<p>还有一个比较显然的结论：</p>
+<p>给定一多元随机变量$\mathbb{X} = \left(X_1, X_2, \cdots , X_n\right)^\mathrm{T} \in \mathbb{R}^n$，如果其各分量独立，且都服从高斯分布，则$\mathbb{X}$是服从联合高斯分布的。</p>
+<blockquote>
+<p>这个结论过于显而易见了，这里不需要给出证明。</p>
+</blockquote>
+<h3 id="Cochran-定理"><a href="#Cochran-定理" class="headerlink" title="Cochran 定理"></a>Cochran 定理</h3><p>设一多维随机变量$\mathbb{X} = \left(X_1, X_2, \cdots , X_n\right)^\mathrm{T} \in \mathbb{R}^n$。定义样本均值(sample mean)</p>
+<script type="math/tex; mode=display">
+\bar{X} = \cfrac{1}{n}\sum_{k=1}^{n} X_k</script><p>和样本方差$\bar{S^2}$(sample variance)</p>
+<script type="math/tex; mode=display">
+\bar{S^2} = \cfrac{1}{n-1}\sum_{k=1}^{n}\left( X_k -  \cfrac{1}{n}\sum_{k=1}^{n} X_k \right)^2</script><blockquote>
+<p>假设每一个$X_k$都有相同的均值和方差，则有$E(\bar{X}) = E(X_k),\ E(\bar{S^2}) = var(X_K)$。至于这里前面的分母为什么是$n-1$而不是$n$，将在附章中说明。</p>
+<p>补充说明一点，不妨设$E(\mathbb{X}) = E\left(\cfrac{1}{n}\sum_{k=1}^{n} X_k\right) = E(X_1)$。</p>
+<p>假设$X_k = A + N_k$，其中$A$是实际值，$N_k$是噪声，有$E(X_k)=A$。</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+var(\mathbb{X}) & = & E\left(\left(\cfrac{1}{n} \sum_{k=1}^n (X_k - A)\right)^2\right) \\
+& = & \cfrac{1}{n^2} E\left(\left(\sum_{k=1}^n (X_k - A)\right)^2\right) \\
+& = & \cfrac{1}{n^2} \left(\sum_{k=1}^nE\left( (X_k - A)^2\right) + \sum_{i \neq j}E\left( (X_i-A)(X_j-A)\right)\right)
+\end{array}</script><p>其中，由于$X_k$之间独立同分布，故交叉项$E((X_i - A)(X_j - A)) = 0, \forall i \neq j$。所以</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+var(\mathbb{X}) & = & \cfrac{1}{n^2} \sum_{k=1}^nE\left( (X_k - A)^2\right) \\
+& = & \cfrac{1}{n^2} n E\left( (X_1 - A)^2\right) \\
+& = & \cfrac{1}{n}var(X_1)
+\end{array}</script><p>于是可以看出，在每次试验结果独立同分布的前提下，多次试验取平均可以使得结果方差有所下降。</p>
+</blockquote>
+<p><strong>Cochran定理</strong>是指，如果，且$\mathbb{X}$各分类独立同分布，且服从高斯分布，则$\bar{X}, \bar{S^2}$是独立的。</p>
+<p>证明：</p>
+<p>构造一个矩阵</p>
+<script type="math/tex; mode=display">
+Q = \left[
+\begin{array}{}
+\cfrac{1}{\sqrt{n}} & \cfrac{1}{\sqrt{n}} & \cdots & \cfrac{1}{\sqrt{n}} \\
+\text{*} & \text{*} & \cdots & \text{*} \\
+\vdots & \vdots & \ddots & \vdots \\
+\text{*} & \text{*} & \cdots & \text{*}
+\end{array}
+\right]_{(n\times n)}</script><p>这里$Q$第一行确定，且满足$Q$是正交的$QQ^\mathrm{T} = I$。将$Q$作用于$\mathbb{X}$</p>
+<script type="math/tex; mode=display">
+\mathbb{Y} = Q\mathbb{X} = \left[
+\begin{array}{}
+\cfrac{1}{\sqrt{n}}\sum_{k=1}^n X_k \\
+\text{*} \\
+\vdots\\
+\text{*}
+\end{array}
+\right]</script><ol>
+<li><p>由高斯线性性质，$\mathbb{Y} \sim N(Q\mu, Q\Sigma Q^\mathrm{T})$</p>
+</li>
+<li><p>计算$\bar{S^2}$</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\sum_{k=1}^{n}\left( X_k -  \cfrac{1}{n}\sum_{k=1}^{n} X_k \right)^2 & = & \sum_{k=1}^{n}\left( X_k -  \bar{X} \right)^2 \\
+& = & \sum_{k=1}^{n}\left( X_k ^ 2- 2X_k\bar{X} + \bar{X}^2\right) \\
+& = & \sum_{k=1}^{n}X_k ^ 2- 2\bar{X}\sum_{k=1}^{n}X_k + n\bar{X}^2 \\
+& = & \sum_{k=1}^{n}X_k ^ 2-  n\bar{X}^2
+\end{array}</script><p>由于$Q$正交，$Y=QX$，故$Y^{\mathrm{T}} Y = X^{\mathrm{T}} Q^{\mathrm{T}} Q X = X^{\mathrm{T}} X$。于是，(2.)中， </p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+\sum_{k=1}^{n}\left( X_k -  \cfrac{1}{n}\sum_{k=1}^{n} X_k \right)^2 & = & \sum_{k=1}^{n}X_k ^ 2-  n\bar{X}^2 \\
+& = & \sum_{k=1}^{n}Y_k ^ 2-  n\bar{X}^2 \\
+& = & \left(\cfrac{1}{\sqrt{n}}\sum_{k=1}^n X_k\right)^2 + \sum_{k=2}^{n}Y_k ^ 2-  n\bar{X}^2 \\
+& = & \cfrac{1}{n} (n\bar{X})^2 +  \sum_{k=2}^{n}Y_k ^ 2-  n\bar{X}^2 \\
+& = & \sum_{k=2}^{n}Y_k ^ 2
+\end{array}</script><p>故</p>
+<script type="math/tex; mode=display">
+\bar{S^2} = \cfrac{1}{n-1} \sum_{k=2}^{n}Y_k ^ 2</script></li>
+<li><p>计算$\bar{X}$<br>根本就不用计算了。</p>
+<script type="math/tex; mode=display">
+\bar{X} =\cfrac{1}{\sqrt{n}} Y_1</script></li>
+</ol>
+<p>至此，可以看出，$\bar{X}$是取决于$Y_1$的，而$\bar{S^2}$是取决于$Y_2, Y_3, \cdots, Y_n$的，故$\mathbb{X}$的样本均值和样本方差是独立的。</p>
+<h3 id="条件分布-Condition-Distribution"><a href="#条件分布-Condition-Distribution" class="headerlink" title="条件分布(Condition Distribution)"></a>条件分布(Condition Distribution)</h3><p>设$\mathbb{X} = \left[ \begin{array}{} \mathbb{X}_1 \\ \mathbb{X}_2 \end{array} \right]\in \mathbb{R}^{m+n}$，其中$\mathbb{X}_1 \in \mathbb{R}^m, \mathbb{X}_2 \in \mathbb{R}^n$。</p>
+<script type="math/tex; mode=display">
+\mathbb{X} \sim N \left(
+\left(
+\begin{array}{}
+\mu_1 \\ \mu_2 
+\end{array}
+\right),
+\left(
+\begin{array}{}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array}
+\right)
+\right)</script><p>其中$\mu_k, \Sigma_{kl}$相应的均值和协方差矩阵。</p>
+<p>那么在条件$\mathbb{X}_2$的约束下，$\mathbb{X}_1$的分布如何？</p>
+<p>写出条件概率密度分布函数</p>
+<script type="math/tex; mode=display">
+f_{\mathbb{X}_1|\mathbb{X}_2}(x_1|x_2) = \cfrac{f_{\mathbb{X}_1,\mathbb{X}_2}(x_1, x_2)}{f_{\mathbb{X}_2}(x_2)} = 
+\cfrac{c_1
+\exp\left( 
+-\cfrac{1}{2}
+\left(
+\begin{array}{}
+x_1^\mathrm{T} - \mu_1^\mathrm{T} & x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\left(
+\begin{array}{}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array}
+\right)^{-1}
+\left(
+\begin{array}{}
+x_1 - \mu_1 \\ x_2 - \mu_2
+\end{array}
+\right)
+\right)
+}
+{c_2
+\exp\left( 
+-\cfrac{1}{2}
+\left(
+\begin{array}{}
+x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\Sigma_{22}^{-1}
+\left(
+\begin{array}{}
+x_2 - \mu_2
+\end{array}
+\right)
+\right)
+}</script><p>忽略常数项，指数部分是</p>
+<script type="math/tex; mode=display">
+-\cfrac{1}{2}
+\left(
+\begin{array}{}
+x_1^\mathrm{T} - \mu_1^\mathrm{T} & x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\left(
+\begin{array}{}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array}
+\right)^{-1}
+\left(
+\begin{array}{}
+x_1 - \mu_1 \\ x_2 - \mu_2
+\end{array}
+\right)
++\cfrac{1}{2}
+\left(
+\begin{array}{}
+x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\Sigma_{22}^{-1}
+\left(
+\begin{array}{}
+x_2 - \mu_2
+\end{array}
+\right)</script><p>这里比较棘手的部分是$\left(<br>\begin{array}{}<br>\Sigma_{11} &amp; \Sigma_{12}\\<br>\Sigma_{21} &amp; \Sigma_{22}<br>\end{array}<br>\right)^{-1}$，要求出这个逆，最好把原矩阵对角化</p>
+<script type="math/tex; mode=display">
+\left(
+\begin{array}{}
+I & -\Sigma_{12}\Sigma_{22}^{-1}\\
+0 & I
+\end{array}
+\right)
+\left(
+\begin{array}{}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array}
+\right)
+\left(
+\begin{array}{}
+I & 0\\
+-\Sigma_{22}^{-1}\Sigma_{21} & I
+\end{array}
+\right) = 
+\left(
+\begin{array}{}
+\Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21} & 0\\
+0 & \Sigma_{22}
+\end{array}
+\right)</script><p>故</p>
+<script type="math/tex; mode=display">
+\left(
+\begin{array}{}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array} \right) ^ {-1} = 
+\left(
+\begin{array}{}
+I & 0\\
+-\Sigma_{22}^{-1}\Sigma_{21} & I
+\end{array}
+\right)
+\left(
+\begin{array}{}
+\Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21} & 0\\
+0 & \Sigma_{22}
+\end{array}
+\right)^{-1}
+\left(
+\begin{array}{}
+I & -\Sigma_{12}\Sigma_{22}^{-1}\\
+0 & I
+\end{array}
+\right)</script><p>进一步地，</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+&\left(
+\begin{array}{}
+x_1^\mathrm{T} - \mu_1^\mathrm{T} & x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\left(
+\begin{array}{}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array}
+\right)^{-1}
+\left(
+\begin{array}{}
+x_1 - \mu_1 \\ x_2 - \mu_2
+\end{array}
+\right)\\
+=&
+\left(
+\begin{array}{}
+x_1^\mathrm{T} - \mu_1^\mathrm{T} & x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\left(
+\begin{array}{}
+I & 0\\
+-\Sigma_{22}^{-1}\Sigma_{21} & I
+\end{array}
+\right)
+\left(
+\begin{array}{}
+\Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21} & 0\\
+0 & \Sigma_{22}
+\end{array}
+\right)^{-1}
+\left(
+\begin{array}{}
+I & -\Sigma_{12}\Sigma_{22}^{-1}\\
+0 & I
+\end{array}
+\right)
+\left(
+\begin{array}{}
+x_1 - \mu_1 \\ x_2 - \mu_2
+\end{array}
+\right)\\
+= &
+\left(
+x_1^{\mathrm{T}} - \mu_1^{\mathrm{T}} - (x_2^{\mathrm{T}} - \mu_2^{\mathrm{T}}) \Sigma_{22}^{-1}\Sigma_{21}
+\right)
+\left(
+\Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}
+\right)^{-1}
+\left(
+x_1 - \mu_1 - \Sigma_{12}\Sigma_{22}^{-1} (x_2 - \mu_2)
+\right) \\
+& + (x_2^{\mathrm{T}} - \mu_2^{\mathrm{T}})\Sigma_{22}^{-1} (x_2 - \mu_2)
+\end{array}</script><p>故指数部分</p>
+<script type="math/tex; mode=display">
+\begin{array}{ll}
+&-\cfrac{1}{2}
+\left(
+\begin{array}{}
+x_1^\mathrm{T} - \mu_1^\mathrm{T} & x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\left(
+\begin{array}{}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array}
+\right)^{-1}
+\left(
+\begin{array}{}
+x_1 - \mu_1 \\ x_2 - \mu_2
+\end{array}
+\right)
++\cfrac{1}{2}
+\left(
+\begin{array}{}
+x_2^\mathrm{T} - \mu_2^\mathrm{T}
+\end{array}
+\right)
+\Sigma_{22}^{-1}
+\left(
+\begin{array}{}
+x_2 - \mu_2
+\end{array}
+\right)\\
+=&
+-\cfrac{1}{2}
+\left(
+x_1^{\mathrm{T}} - \mu_1^{\mathrm{T}} - (x_2^{\mathrm{T}} - \mu_2^{\mathrm{T}}) \Sigma_{22}^{-1}\Sigma_{21}
+\right)
+\left(
+\Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}
+\right)^{-1}
+\left(
+x_1 - \mu_1 - \Sigma_{12}\Sigma_{22}^{-1} (x_2 - \mu_2)
+\right)\\
+=&
+-\cfrac{1}{2}
+\left(
+x_1 - \mu_{1|2}
+\right)^{\mathrm{T}}
+\Sigma_{1|2}^{-1}
+\left(
+x_1 - \mu_{1|2}
+\right)
+\end{array}</script><p>即</p>
+<script type="math/tex; mode=display">
+f_{\mathbb{X}_1|\mathbb{X}_2}(x_1|x_2) = \cfrac{f_{\mathbb{X}_1,\mathbb{X}_2}(x_1, x_2)}{f_{\mathbb{X}_2}(x_2)} = c\exp\left( -\cfrac{1}{2}
+\left(
+x_1 - \mu_{1|2}
+\right)^{\mathrm{T}}
+\Sigma_{1|2}^{-1}
+\left(
+x_1 - \mu_{1|2}
+\right)\right)</script><p>其中</p>
+<script type="math/tex; mode=display">
+c=\cfrac{c_1}{c_2}, \\
+\mu_{1|2} = \mu_1 + \Sigma_{12}\Sigma_{22}^{-1} (x_2 - \mu_2) = E(X_1|X_2),\\
+\Sigma_{1|2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}</script><p>现在我们来看看这有什么含义。</p>
+<ol>
+<li><p>常数项$c$不用说了。</p>
+</li>
+<li><p>$\mu_{1|2} = \mu_1 + \Sigma_{12}\Sigma_{22}^{-1} (x_2 - \mu_2) = E(X_1|X_2)$指的是，本来在没有已知条件的情况下，对$X_1$的期望估计就是纯纯的$\mu_1$，现加入估计$X_2$，代表我们有一定的先验信息，那么第二项$\Sigma_{12}\Sigma_{22}^{-1} (x_2 - \mu_2) = E(X_1|X_2)$代表的是这一信息对$\mu_1$的调整，其可以认为是随机变量$X_1$在$X_2$方向的投影。$\Sigma_{12}\Sigma_{22}^{-1}$则可以认为是两个随机变量的夹角，意味着两个随机变量的相关，如果这个相关性越强，那么先验信息$X_2$对结果的影响就越大。在高斯分布的前提下，这样的调整实际上是一种最优的调整。下面我们来说明其为何最优。<br>现在我们有先验信息$X_2$，我们要估计在这样的先验信息下$X_1$的最优估计。为简化计算，我们假设它们都是均值为$0$的高斯分布。</p>
+<ul>
+<li><p>最优线性估计$X_1\leftarrow X_2$</p>
+<script type="math/tex; mode=display">
+\min_\alpha E\left((X_1 - \alpha X_2)^2\right)</script><p>得到的$\alpha = \cfrac{E(X_1X_2)}{E(X_2^2)}$就是投影。这里不用证明了，各个学科都证明太多次了。</p>
+</li>
+<li><p>最优估计$X_1\leftarrow X_2$</p>
+<script type="math/tex; mode=display">
+\min_gE\left( (X_1 - g(X_2))^2 \right)</script><p>实际上，在高斯分布的前提下，上面的最优线性估计就是最优估计了，即$g$就是概率期望函数，$g(X_2) = E(X_1|X_2)$。这是因为</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+E\left( (X_1 - g(X_2))^2 \right) & = & E\left( (X_1 -E(X_1|X_2) + E(X_1|X_2) - g(X_2))^2 \right) \\
+& = & E\left( ((X_1 -E(X_1|X_2))^2 \right) + E\left((E(X_1|X_2) - g(X_2))^2 \right)\\
+& & + 2E\left( (X_1 -E(X_1|X_2)) (E(X_1|X_2) - g(X_2)) \right)
+\end{array}</script><p>得到的第三项</p>
+<script type="math/tex; mode=display">
+E\left( (X_1 -E(X_1|X_2)) (E(X_1|X_2) - g(X_2)) \right) = E_{X_2} \left(E_{X_1}\left(  
+(X_1 - E(X_1|X_2) ) ( E(X_1|X_2) - g(X_2) ) |X_2
+\right)\right)</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{array}{rcl}
+E_{X_1}\left((X_1 - E(X_1|X_2) ) ( E(X_1|X_2) - g(X_2) ) |X_2 \right) & = & ( E(X_1|X_2) - g(X_2) )E_{X_1}\left((X_1 - E(X_1|X_2) ) |X_2 \right) \\
+& = & ( E(X_1|X_2) - g(X_2) )(E(X_1 |X_2) - E(X_1|X_2) )\\
+& = & 0
+\end{array}</script><p>这意味着， </p>
+<script type="math/tex; mode=display">
+E\left( (X_1 - g(X_2))^2 \right) = E\left( ((X_1 -E(X_1|X_2))^2 \right) + E\left((E(X_1|X_2) - g(X_2))^2 \right)</script><p>而第二项作为平方项的期望是非负的，故对于任意的$g$，都有</p>
+<script type="math/tex; mode=display">
+E\left( (X_1 - g(X_2))^2 \right) \geq E\left( ((X_1 -E(X_1|X_2))^2 \right)</script><p>至此，上面的结论得证了。</p>
+</li>
+</ul>
+</li>
+<li><p>$\Sigma_{1|2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}$表示的是加入先验信息后新估计的协方差矩阵，是大于零（正定）的。这是显然的，因为是协方差矩阵嘛，不过同时这可以直接从Cauthy-Schwarz不等式直接导出。另外不难看出第二项也是正定的，也就是说，新的协方差矩阵一定会比有先验信息之前的$\Sigma_{11}$更小。从信息的角度上来讲，这是因为引入先验信息后，随机变量的熵一定是减小的，这也是符合直觉的。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/06/06/%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B/" data-id="cl428v4or0001youo9kgjdlqp" data-title="高斯过程(Gaussian Processes)" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/06/06/hello-world/" class="article-date">
+  <time class="dt-published" datetime="2022-06-06T04:28:39.931Z" itemprop="datePublished">2022-06-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/06/06/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/06/06/hello-world/" data-id="cl428v4om0000youo2pm34d4g" data-title="Hello World" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/06/06/%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B/">高斯过程(Gaussian Processes)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/06/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 三天打鱼<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
